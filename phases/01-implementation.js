@@ -71,7 +71,7 @@ class HashTable { // get O(1), set O(1), deleteKey O(1)
 
     /*mean there is more then one element at the index
     => there is a linked list, a hash collison happend*/
-    if (head.next) {
+    //if (head.next) {
       while (head) {
         if (head.key === key) {
           return head.value;
@@ -79,15 +79,35 @@ class HashTable { // get O(1), set O(1), deleteKey O(1)
         //Update the head or move through the linked list.
         head = head.next;
       }
-    }
-    if (head.key !== key) return undefined;
+    //}
+    //if (head.key !== key) return undefined;
     //if there is an element
-    return this.data[index].value;//this will work if there is not hash collison inseartion
+    //return this.data[index].value;//this will work if there is not hash collison inseartion
+    return undefined;
   }
 
 
   resize() {
     // Your code here
+    this.capacity *= 2;
+
+    const oldData = this.data;
+    this.data = new Array(this.capacity).fill(null);
+
+    for (let i = 0; i < oldData.length; i++){
+      let head = oldData[i];
+
+      while (head) {
+        let index = this.hashMod(head.key);
+        let next = head.next;
+
+        head.next = this.data[index];
+        this.data[index] = head;
+
+        head = next;
+      }
+    }
+
   }
 
 
