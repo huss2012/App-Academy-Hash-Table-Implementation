@@ -34,6 +34,10 @@ class HashTable { // get O(1), set O(1), deleteKey O(1)
 
   insert(key, value) {
     // Your code here
+    //Check load factor and resize if necessaryL:
+    if (this.count / this.capacity > 0.7) {
+      this.resize();
+    }
     //1.Create the keyValuePair:
     let keyValuePair = new KeyValuePair(key, value);
     //2.Create the index:
@@ -113,6 +117,26 @@ class HashTable { // get O(1), set O(1), deleteKey O(1)
 
   delete(key) {
     // Your code here
+    //1.Create the index:
+    let index = this.hashMod(key);
+    let head = this.data[index];
+
+    if (head && head.key === key) {
+      this.data[index] = head.next;
+      this.count--;
+      return;
+    }
+
+    while (head && head.next) {
+      if (key === head.next.key) {
+        head.next = head.next.next;
+        this.count--;
+        return;
+      }
+      head = head.next;
+    }
+    //If while do not return anything means the key does not excest.
+    return "Key not found";
   }
 }
 
